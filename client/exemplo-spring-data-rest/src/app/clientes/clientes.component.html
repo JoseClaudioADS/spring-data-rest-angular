@@ -1,0 +1,93 @@
+
+<div class="container mt-5">
+  <h3>Clientes</h3>
+
+  <hr />
+
+  <form role="form" class="form-inline">
+    <div class="form-group mx-sm-3 mb-2">
+      <label for="nome" class="mx-sm-3 ">Nome</label>
+      <input
+        type="text"
+        name="nome"
+        class="form-control"
+        [(ngModel)]="cliente.nome"
+      />
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+      <label for="email" class="mx-sm-3">E-mail</label>
+      <input
+        type="email"
+        name="email"
+        class="form-control"
+        [(ngModel)]="cliente.email"
+      />
+    </div>
+    <button class="btn btn-primary mb-2" (click)="salvar()">Salvar</button>
+  </form>
+
+  <table class="table" *ngIf="clientes">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientes._embedded.clientes">
+        <td>{{ c.nome }}</td>
+        <td>{{ c.email }}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button
+              class="btn btn-dark fa fa-edit"
+              (click)="alterar(c)"
+            ></button>
+            <button
+              class="btn btn-danger fa fa-close"
+              (click)="abrirModal(modalExclusao, c)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ngb-pagination
+  *ngIf="clientes"
+  [collectionSize]="clientes.page.totalElements"
+  [(page)]="pagina"
+  [pageSize]="5"
+  class="d-flex justify-content-center"
+  [boundaryLinks]="true"
+  (pageChange)="pesquisar()"
+  aria-label="Paginação customizada"
+>
+</ngb-pagination>
+
+<ng-template #modalExclusao let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Exclusão de cliente</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Tem certeza que deseja excluir o cliente {{ cliente.nome }}?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="excluir()">
+      Sim
+    </button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">
+      Não
+    </button>
+  </div>
+</ng-template>
